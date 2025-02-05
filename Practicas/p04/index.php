@@ -31,5 +31,36 @@
         echo '<li>$house*5 es inválida porque el símbolo  *  no está permitido en nombres de variables.</li>';
         echo '</ul>';
     ?>
+
+    <h2>Ejercicio 2</h2>
+    <p>Proporcionando valores a las variables y mostrando sus contenidos:</p>
+
+    <?php
+        $a = "ManejadorSQL";
+        $b = 'MySQL';
+        $c = &$a;
+
+        echo "<h4>Antes del segundo bloque de asignaciones:</h4>";
+        echo "<ul>";
+        echo "<li>\$a = $a</li>";
+        echo "<li>\$b = $b</li>";
+        echo "<li>\$c = $c</li>";
+        echo "</ul>";
+
+        $a = "PHP server";
+        $b = &$a;
+
+        echo "<h4>Después del segundo bloque de asignaciones:</h4>";
+        echo "<ul>";
+        echo "<li>\$a = $a</li>";
+        echo "<li>\$b = $b</li>";
+        echo "<li>\$c = $c</li>";
+        echo "</ul>";
+
+        echo "<h3>Explicación:</h3>";
+        echo "<p>Cuando se usa el operador de referencia (&), cualquier cambio en la variable original afecta a todas las referencias.</p>";
+        echo "<p>Inicialmente, \$c era una referencia de \$a, por lo que cuando se cambió \$a a 'PHP server', \$c también cambió.</p>";
+        echo "<p>Luego, al hacer \$b = &\$a, ahora \$b también apunta a la misma memoria que \$a, por lo que su valor también se actualiza automáticamente.</p>";
+    ?>
 </body>
 </html>
