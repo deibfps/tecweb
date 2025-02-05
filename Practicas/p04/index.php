@@ -168,6 +168,28 @@
         unset($a, $b, $c);
     ?>
 
+    <?php
+        echo "<h2>Ejercicio 6: Valores Booleanos</h2>";
+
+        $a = "0";      
+        $b = "TRUE";    
+        $c = FALSE;    
+        $d = ($a OR $b);
+        $e = ($a AND $c);
+        $f = ($a XOR $b);
+
+        echo "<h3>Valores Booleanos con var_dump:</h3>";
+        echo "<pre>";
+        var_dump($a, $b, $c, $d, $e, $f);
+        echo "</pre>";
+
+        echo "<h3>Valores convertidos a string:</h3>";
+        echo "<ul>";
+        echo "<li>c: " . json_encode($c) . "</li>";
+        echo "<li>e: " . json_encode($e) . "</li>";
+        echo "</ul>";
+        unset($a, $b, $c, $d, $e, $f);
+    ?>
 
 </body>
 </html>
