@@ -26,5 +26,27 @@
     <hr>
 <!--Ejercicio 1-->
 
+<!--Ejercicio 2-->
+<h2>Ejercicio 2: Generación de secuencia impar, par, impar</h2>
+    <form method="get">
+        <input type="hidden" name="ejercicio2" value="1">
+        <input type="submit" value="Generar Secuencia">
+    </form>
+    <?php
+    if (isset($_GET['ejercicio2'])) {
+        require_once 'src/funciones.php';
+        $resultado = generar_secuencia();
+        echo "<h3>Secuencia generada:</h3><pre>";
+        foreach ($resultado['secuencia'] as $fila) {
+            echo implode(", ", $fila) . "<br>";
+        }
+        echo "</pre>";
+        echo "<p>Total de números generados: {$resultado['total_numeros']}</p>";
+        echo "<p>Número de iteraciones: {$resultado['iteraciones']}</p>";
+    }
+    ?>
+    <hr>
+<!--Ejercicio 2-->
+
 </body>
 </html>
