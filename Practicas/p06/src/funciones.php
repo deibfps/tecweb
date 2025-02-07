@@ -36,5 +36,17 @@ function generar_secuencia() {
 }
 // Funcion 2
 
+//Funcion 3
+function buscar_multiplo($numero_dado) {
+    $contador = 1;
+    while (true) {
+        $numero_aleatorio = rand(1, 100);
+        if ($numero_aleatorio % $numero_dado == 0) {
+            return "El primer múltiplo de $numero_dado es $numero_aleatorio encontrado en $contador iteraciones.";
+        }
+        $contador++;
+    }
+}
+//Funcion 3
 
 ?>
