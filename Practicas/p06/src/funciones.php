@@ -49,4 +49,14 @@ function buscar_multiplo($numero_dado) {
 }
 //Funcion 3
 
+//Funcion 4 
+function crear_arreglo_letras() {
+    $arreglo = [];
+    for ($i = 97; $i <= 122; $i++) {
+        $arreglo[$i] = chr($i);
+    }
+    return $arreglo;
+}
+//Funcion 4 
+
 ?>
