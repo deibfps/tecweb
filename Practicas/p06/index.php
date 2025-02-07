@@ -101,5 +101,42 @@
     <hr>
 <!--Ejercicio 5-->
 
+<!--Ejercicio 6-->
+<h2>Ejercicio 6: Consulta de Parque Vehicular</h2>
+<form method="get">
+    <label for="matricula">Ingrese la matrícula del vehículo:</label>
+    <input type="text" name="matricula" id="matricula" required>
+    <input type="submit" value="Buscar">
+</form>
+
+<form method="get">
+    <input type="hidden" name="mostrar_todos" value="1">
+    <input type="submit" value="Mostrar Todos">
+</form>
+
+<?php
+require_once __DIR__ . '/src/funciones.php';
+
+if (isset($_GET['matricula'])) {
+    $matricula = strtoupper($_GET['matricula']);
+    $resultado = buscarVehiculo($matricula);
+
+    if ($resultado) {
+        echo "<h3>Información del Vehículo</h3><pre>";
+        print_r($resultado);
+        echo "</pre>";
+    } else {
+        echo "<p>No se encontró un vehículo con la matrícula $matricula.</p>";
+    }
+}
+
+if (isset($_GET['mostrar_todos'])) {
+    echo "<h3>Todos los Vehículos Registrados</h3><pre>";
+    print_r(obtenerTodosLosVehiculos());
+    echo "</pre>";
+}
+?>
+<!--Ejercicio 6-->
+
 </body>
 </html>
