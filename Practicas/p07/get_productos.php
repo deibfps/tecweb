@@ -1,49 +1,54 @@
 <?php
-    header("Content-Type: application/json; charset=utf-8"); 
-    $data = array();
+    header("Content-Type: application/xhtml+xml; charset=utf-8"); 
 
-	if(isset($_GET['tope']))
-    {
-		$tope = $_GET['tope'];
+echo "<?xml version='1.0' encoding='UTF-8'?>";
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Lista de Productos</title>
+</head>
+<body>
+    <h1>Lista de Productos</h1>
+    
+    <?php
+    if(isset($_GET['tope'])) {
+        $tope = intval($_GET['tope']);
+    } else {
+        die('<p>Parámetro "tope" no detectado...</p></body></html>');
     }
-    else
-    {
-        die('Parámetro "tope" no detectado...');
-    }
 
-	if (!empty($tope))
-	{
-		/** SE CREA EL OBJETO DE CONEXION */
-		@$link = new mysqli('localhost', 'root', '12345678a', 'marketzone');
-        /** NOTA: con @ se suprime el Warning para gestionar el error por medio de código */
+    if (!empty($tope)) {
+        /** SE CREA EL OBJETO DE CONEXION */
+        @$link = new mysqli('localhost', 'root', '12345678a', 'marketzone');
+        
+        /** comprobar la conexión */
+        if ($link->connect_errno) {
+            die('<p>Falló la conexión: '.$link->connect_error.'</p></body></html>');
+        }
 
-		/** comprobar la conexión */
-		if ($link->connect_errno) 
-		{
-			die('Falló la conexión: '.$link->connect_error.'<br/>');
-			//exit();
-		}
-
-		/** Crear una tabla que no devuelve un conjunto de resultados */
-		if ( $result = $link->query("SELECT * FROM productos WHERE unidades <= $tope") ) 
-		{
-            /** Se extraen las tuplas obtenidas de la consulta */
-			$row = $result->fetch_all(MYSQLI_ASSOC);
-
-            /** Se crea un arreglo con la estructura deseada */
-            foreach($row as $num => $registro) {            // Se recorren tuplas
-                foreach($registro as $key => $value) {      // Se recorren campos
-                    $data[$num][$key] = utf8_encode($value);
-                }
+        /** Ejecutar la consulta */
+        if ($result = $link->query("SELECT * FROM productos WHERE unidades <= $tope")) {
+            echo "<table border='1'>";
+            echo "<tr><th>ID</th><th>Nombre</th><th>Unidades</th><th>Precio</th></tr>";
+            
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>" . htmlspecialchars($row['id']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['nombre']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['unidades']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['precio']) . "</td>";
+                echo "</tr>";
             }
+            
+            echo "</table>";
+            $result->free();
+        } else {
+            echo '<p>No se encontraron productos.</p>';
+        }
 
-			/** útil para liberar memoria asociada a un resultado con demasiada información */
-			$result->free();
-		}
-
-		$link->close();
-
-        /** Se devuelven los datos en formato JSON */
-        echo json_encode($data, JSON_PRETTY_PRINT);
-	}
-	?>
+        $link->close();
+    }
+    ?>
+</body>
+</html>
