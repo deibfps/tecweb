@@ -37,7 +37,7 @@
             exit();
         }
 
-        @$link = new mysqli('localhost', 'root', 'distrito123', 'marketzone');
+        @$link = new mysqli('localhost', 'root', 'distrito123n', 'marketzone');
         if ($link->connect_errno) {
             echo "<tr><td colspan='8'>Falló la conexión: " . htmlspecialchars($link->connect_error) . "</td></tr>";
             echo "</table></body></html>";
