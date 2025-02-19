@@ -31,15 +31,12 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Producto</title>
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
 	</head>
 	<body>
 		<h3>PRODUCTO</h3>
 
-		<br/>
-		
 		<?php if( isset($row) ) : ?>
-
 			<table class="table">
 				<thead class="thead-dark">
 					<tr>
@@ -61,18 +58,24 @@
 						<td><?= $row['modelo'] ?></td>
 						<td><?= $row['precio'] ?></td>
 						<td><?= $row['unidades'] ?></td>
-						<td><?= utf8_encode($row['detalles']) ?></td>
-						<td><img src=<?= $row['imagen'] ?> ></td>
+						<td><?= $row['detalles'] ?></td>
+						<td><img src="<?= $row['imagen'] ?>" alt="producto"/></td>
 					</tr>
 				</tbody>
 			</table>
 
 		<?php elseif(!empty($id)) : ?>
 
-			 <script>
+			 <script type="text/javascript">
                 alert('El ID del producto no existe');
              </script>
 
 		<?php endif; ?>
+		<div>
+			<p>
+				<a href="https://validator.w3.org/markup/check?uri=referer"><img
+				src="https://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88" /></a>
+			</p>
+		</div>
 	</body>
 </html>
