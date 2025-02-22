@@ -7,17 +7,14 @@ $detalles = 'detalles_producto';
 $unidades = 1;
 $imagen   = 'img/imagen.png';
 
-/** SE CREA EL OBJETO DE CONEXION */
-@$link = new mysqli('localhost', 'root', '12345678a', 'marketzone');	
+@$link = new mysqli('localhost', 'root', 'distrito123', 'marketzone');	
 
-/** comprobar la conexión */
 if ($link->connect_errno) 
 {
     die('Falló la conexión: '.$link->connect_error.'<br/>');
     /** NOTA: con @ se suprime el Warning para gestionar el error por medio de código */
 }
 
-/** Crear una tabla que no devuelve un conjunto de resultados */
 $sql = "INSERT INTO productos VALUES (null, '{$nombre}', '{$marca}', '{$modelo}', {$precio}, '{$detalles}', {$unidades}, '{$imagen}')";
 if ( $link->query($sql) ) 
 {
