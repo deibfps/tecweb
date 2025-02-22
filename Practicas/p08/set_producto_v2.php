@@ -1,5 +1,5 @@
 <?php
-@$link = new mysqli('localhost', 'root', 'password', 'marketzone');
+@$link = new mysqli('localhost', 'root', 'distrito123', 'marketzone');
 
 if ($link->connect_errno) {
     die('Error de conexión: ' . $link->connect_error);
@@ -11,7 +11,7 @@ $modelo = $_POST['modelo'] ?? '';
 $precio = $_POST['precio'] ?? 0;
 $detalles = $_POST['detalles'] ?? '';
 $unidades = $_POST['unidades'] ?? 0;
-$imagenes = $_POST['imagenes'] ?? '';  // corrcion 4
+$imagenes = $_POST['imagenes'] ?? '';
 
 $sql_verificar = "SELECT nombre, marca, modelo FROM productos WHERE nombre=? OR marca=? OR modelo=?";
 $stmt = $link->prepare($sql_verificar);

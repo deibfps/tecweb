@@ -14,7 +14,7 @@
     if (isset($_GET['tope']) && is_numeric($_GET['tope'])) {
         $tope = intval($_GET['tope']);
 
-        @$link = new mysqli('localhost', 'root', 'password', 'marketzone');
+        @$link = new mysqli('localhost', 'root', 'distrito123', 'marketzone');
 
         if ($link->connect_errno) {
             die('<div class="alert alert-danger">Falló la conexión: ' . $link->connect_error . '</div>');
