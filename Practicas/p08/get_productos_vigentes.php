@@ -36,7 +36,7 @@
                     echo '<td>' . htmlspecialchars($row['precio']) . '</td>';
                     echo '<td>' . htmlspecialchars($row['unidades']) . '</td>';
                     echo '<td>' . htmlspecialchars($row['detalles']) . '</td>';
-                    echo '<td><img src="' . htmlspecialchars($row['imagenes']) . '" width="100" height="100"/></td>';
+                    echo '<td><img src="../p07/' . htmlspecialchars($row['imagen']) . '" width="100" height="100"/></td>';
                     echo '</tr>';
                 }
 
