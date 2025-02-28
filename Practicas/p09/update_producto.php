@@ -1,7 +1,6 @@
 <?php
 /* MySQL Conexion*/
-@$link = new mysqli('localhost', 'root', 'distrito123', 'marketzone');
-// Chequea coneccion
+$link = mysqli_connect("localhost", "root", "distrito123", "marketzone");
 if($link === false){
 die("ERROR: No pudo conectarse con la DB. " . mysqli_connect_error());
 }

@@ -1,77 +1,63 @@
-<?php
-    header("Content-Type: application/xhtml+xml; charset=utf-8"); 
-    echo '<?xml version="1.0" encoding="UTF-8"?>';
-    echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
-?>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es">
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Lista de Productos</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid black; padding: 8px; text-align: left; }
-        th { background-color: #333; color: white; }
-        img { width: 100px; }
-    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
 </head>
 <body>
-    <h1>PRODUCTO</h1>
-    <table>
-        <tr>
-            <th>#</th>
-            <th>Nombre</th>
-            <th>Marca</th>
-            <th>Modelo</th>
-            <th>Precio</th>
-            <th>Unidades</th>
-            <th>Detalles</th>
-            <th>Imagen</th>
-        </tr>
-        
-        <?php
-        if(isset($_GET['tope'])) {
-            $tope = intval($_GET['tope']);
-        } else {
-            echo "<tr><td colspan='8'>Parámetro 'tope' no detectado...</td></tr>";
-            echo "</table></body></html>";
-            exit();
-        }
+    <h3>Lista de Productos con Unidades Menores o Iguales a <?= htmlspecialchars($_GET['tope'] ?? 'N/A') ?></h3>
+    <br/>
 
-        @$link = new mysqli('localhost', 'root', 'distrito123n', 'marketzone');
+    <?php
+    if (isset($_GET['tope']) && is_numeric($_GET['tope'])) {
+        $tope = intval($_GET['tope']);
+
+        /** SE CREA EL OBJETO DE CONEXIÓN */
+        @$link = new mysqli('localhost', 'root', 'distrito123', 'marketzone');
+
+        /** Comprobar la conexión */
         if ($link->connect_errno) {
-            echo "<tr><td colspan='8'>Falló la conexión: " . htmlspecialchars($link->connect_error) . "</td></tr>";
-            echo "</table></body></html>";
-            exit();
+            die('<div class="alert alert-danger">Falló la conexión: ' . $link->connect_error . '</div>');
         }
 
-        $query = "SELECT * FROM productos WHERE unidades <= ?";
-        if ($stmt = $link->prepare($query)) {
-            $stmt->bind_param("i", $tope);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            
+        /** Ejecutar la consulta */
+        if ($result = $link->query("SELECT * FROM productos WHERE unidades <= $tope")) {
             if ($result->num_rows > 0) {
-                $num = 1;
+                echo '<table class="table">';
+                echo '<thead class="thead-dark">';
+                echo '<tr><th>#</th><th>Nombre</th><th>Marca</th><th>Modelo</th><th>Precio</th><th>Unidades</th><th>Detalles</th><th>Imagen</th></tr>';
+                echo '</thead><tbody>';
+
                 while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>" . $num++ . "</td>";
-                    echo "<td>" . htmlspecialchars($row['nombre']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['marca']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['modelo']) . "</td>";
-                    echo "<td>$" . number_format($row['precio'], 2) . "</td>";
-                    echo "<td>" . intval($row['unidades']) . "</td>";
-                    echo "<td>" . htmlspecialchars($row['detalles']) . "</td>";
-                    echo "<td><img src='" . htmlspecialchars($row['imagen']) . "' alt='Imagen de producto' /></td>";
-                    echo "</tr>";
+                    echo '<tr>';
+                    echo '<th scope="row">' . htmlspecialchars($row['id']) . '</th>';
+                    echo '<td>' . htmlspecialchars($row['nombre']) . '</td>';
+                    echo '<td>' . htmlspecialchars($row['marca']) . '</td>';
+                    echo '<td>' . htmlspecialchars($row['modelo']) . '</td>';
+                    echo '<td>' . htmlspecialchars($row['precio']) . '</td>';
+                    echo '<td>' . htmlspecialchars($row['unidades']) . '</td>';
+                    echo '<td>' . htmlspecialchars($row['detalles']) . '</td>';
+                    echo '<td><img src="img/' . htmlspecialchars(basename($row['imagen'])) . '" width="100" height="100"/></td>';
+                    echo '</tr>';
                 }
+
+                echo '</tbody></table>';
             } else {
-                echo "<tr><td colspan='8'>No hay productos con unidades menores o iguales a " . $tope . "</td></tr>";
+                echo '<div class="alert alert-warning">No hay productos con unidades menores o iguales a ' . $tope . '.</div>';
             }
-            
-            $stmt->close();
+
+            /** Liberar resultados */
+            $result->free();
         }
+
+        /** Cerrar conexión a base de datos */
         $link->close();
-        ?>
-    </table>
+    } else {
+        echo '<div class="alert alert-danger">Parámetro "tope" no válido o no proporcionado.</div>';
+    }
+    ?>
 </body>
+</html>
 </html>
