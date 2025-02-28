@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Producto</title>
+</head>
+<body>
+    <h2>Registro de Producto</h2>
+    <form action="set_producto_v2.php" method="post">
+
+        <label>Nombre del Producto:</label>
+        <input type="text" name="nombre" required><br>
+
+        <label>Marca:</label>
+        <input type="text" name="marca" required><br>
+
+        <label>Modelo:</label>
+        <input type="text" name="modelo" required><br>
+
+        <label>Precio:</label>
+        <input type="number" name="precio" step="0.01" required><br>
+
+        <label>Detalles:</label>
+        <textarea name="detalles"></textarea><br>
+
+        <label>Unidades Disponibles:</label>
+        <input type="number" name="unidades" min="1" required><br>
+
+        <label>Imagen (URL):</label>
+        <input type="text" name="imagenes" required><br>
+
+        <input type="submit" value="Registrar Producto">
+        
+    </form>
+</body>
+</html>
