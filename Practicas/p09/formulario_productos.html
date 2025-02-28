@@ -3,34 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <title>Registro de Producto</title>
+    <script>
+        function validarFormulario(event) {
+            event.preventDefault(); //no envia el form automaticamente
+            let nombre = document.getElementById("nombre").value.trim();
+            let marca = document.getElementById("marca").value;
+            let modelo = document.getElementById("modelo").value.trim();
+            let precio = parseFloat(document.getElementById("precio").value);
+            let detalles = document.getElementById("detalles").value.trim();
+            let unidades = parseInt(document.getElementById("unidades").value);
+            let imagen = document.getElementById("imagenes").value.trim();
+            let errores = [];
+
+            if (nombre === "" || nombre.length > 100) {
+                errores.push("⚠ El nombre es obligatorio y debe tener 100 caracteres o menos ⚠");
+            }
+
+            if (marca === "") {
+                errores.push("⚠ Debe seleccionar una marca ⚠");
+            }
+
+            if (modelo === "" || modelo.length > 25 || !/^[a-zA-Z0-9\s]+$/.test(modelo)) {
+                errores.push("⚠ El modelo es obligatorio, debe ser alfanumérico y no superar los 25 caracteres ⚠");
+            }
+
+            if (isNaN(precio) || precio <= 99.99) {
+                errores.push("⚠ El precio es obligatorio y debe ser mayor a 99.99 ⚠");
+            }
+
+            if (detalles.length > 250) {
+                errores.push("⚠ Los detalles no pueden exceder los 250 caracteres ⚠");
+            }
+
+            if (isNaN(unidades) || unidades < 0) {
+                errores.push("⚠ Las unidades deben ser 0 o más ⚠");
+            }
+
+            if (imagen === "") {
+                document.getElementById("imagenes").value = "src/cat.png";
+            }
+
+            if (errores.length > 0) {
+                alert(errores.join("\n")); // muestra errores
+            } else {
+                document.getElementById("form-producto").submit();
+            }
+        }
+    </script>
 </head>
 <body>
     <h2>Registro de Producto</h2>
-    <form action="set_producto_v2.php" method="post">
-
+    <form id="form-producto" action="set_producto_v2.php" method="post" onsubmit="validarFormulario(event)">
         <label>Nombre del Producto:</label>
-        <input type="text" name="nombre" required><br>
+        <input type="text" id="nombre" name="nombre" required><br>
 
         <label>Marca:</label>
-        <input type="text" name="marca" required><br>
+        <select id="marca" name="marca" required>
+            <option value="">Seleccione una marca</option>
+            <option value="Sony">Sony</option>
+            <option value="Samsung">Samsung</option>
+            <option value="Apple">Apple</option>
+            <option value="Xiaomi">Xiaomi</option>
+        </select><br>
 
         <label>Modelo:</label>
-        <input type="text" name="modelo" required><br>
+        <input type="text" id="modelo" name="modelo" required><br>
 
         <label>Precio:</label>
-        <input type="number" name="precio" step="0.01" required><br>
+        <input type="number" id="precio" name="precio" step="0.01" required><br>
 
         <label>Detalles:</label>
-        <textarea name="detalles"></textarea><br>
+        <textarea id="detalles" name="detalles"></textarea><br>
 
         <label>Unidades Disponibles:</label>
-        <input type="number" name="unidades" min="1" required><br>
+        <input type="number" id="unidades" name="unidades" min="0" required><br>
 
         <label>Imagen (URL):</label>
-        <input type="text" name="imagenes" required><br>
+        <input type="text" id="imagenes" name="imagenes"><br>
 
         <input type="submit" value="Registrar Producto">
-        
     </form>
 </body>
 </html>
