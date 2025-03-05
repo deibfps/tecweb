@@ -1,5 +1,14 @@
+document.addEventListener("DOMContentLoaded", function() {
+    let form = document.getElementById("task-form");
+    
+    // Eliminamos cualquier event listener previo para evitar duplicados
+    form.removeEventListener("submit", agregarProducto);
+    form.addEventListener("submit", agregarProducto);
+});
+
 // JSON BASE A MOSTRAR EN FORMULARIO
 var baseJSON = {
+    "nombre": "Producto X",
     "precio": 0.0,
     "unidades": 1,
     "modelo": "XX-000",
@@ -8,103 +17,103 @@ var baseJSON = {
     "imagen": "img/default.png"
 };
 
-// FUNCIÓN CALLBACK DE BOTÓN "Buscar por ID"
-function buscarID(e) {
-    e.preventDefault();
-    var id = document.getElementById('search').value;
-    var client = getXMLHttpRequest();
-
-    client.open('POST', './backend/read.php', true);
-    client.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    client.onreadystatechange = function () {
-        if (client.readyState == 4 && client.status == 200) {
-            console.log('[CLIENTE]\n' + client.responseText);
-            let productos = JSON.parse(client.responseText);
-
-            if (Object.keys(productos).length > 0) {
-                let descripcion = `
-                    <li>precio: ${productos.precio}</li>
-                    <li>unidades: ${productos.unidades}</li>
-                    <li>modelo: ${productos.modelo}</li>
-                    <li>marca: ${productos.marca}</li>
-                    <li>detalles: ${productos.detalles}</li>`;
-
-                let template = `
-                    <tr>
-                        <td>${productos.id}</td>
-                        <td>${productos.nombre}</td>
-                        <td><ul>${descripcion}</ul></td>
-                    </tr>`;
-
-                document.getElementById("productos").innerHTML = template;
-            }
-        }
-    };
-    client.send("id=" + id);
-}
-
-// NUEVA FUNCIÓN: BÚSQUEDA FLEXIBLE POR NOMBRE, MARCA O DETALLES
-function buscarProducto(e) {
-    e.preventDefault();
-    var query = document.getElementById('search').value;
-    var client = getXMLHttpRequest();
-
-    client.open('POST', './backend/read.php', true);
-    client.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    client.onreadystatechange = function () {
-        if (client.readyState == 4 && client.status == 200) {
-            console.log('[CLIENTE]\n' + client.responseText);
-            let productos = JSON.parse(client.responseText);
-            let resultado = document.getElementById("productos");
-            resultado.innerHTML = "";
-
-            if (productos.length > 0) {
-                productos.forEach(producto => {
-                    let descripcion = `
-                        <li>precio: ${producto.precio}</li>
-                        <li>unidades: ${producto.unidades}</li>
-                        <li>modelo: ${producto.modelo}</li>
-                        <li>marca: ${producto.marca}</li>
-                        <li>detalles: ${producto.detalles}</li>`;
-
-                    let template = `
-                        <tr>
-                            <td>${producto.id}</td>
-                            <td>${producto.nombre}</td>
-                            <td><ul>${descripcion}</ul></td>
-                        </tr>`;
-
-                    resultado.innerHTML += template;
-                });
-            } else {
-                resultado.innerHTML = "<tr><td colspan='3'>No se encontraron productos.</td></tr>";
-            }
-        }
-    };
-    client.send("query=" + encodeURIComponent(query));
-}
-
-// SE CREA EL OBJETO DE CONEXIÓN COMPATIBLE CON EL NAVEGADOR
-function getXMLHttpRequest() {
-    var objetoAjax;
-    try {
-        objetoAjax = new XMLHttpRequest();
-    } catch (err1) {
-        try {
-            objetoAjax = new ActiveXObject("Msxml2.XMLHTTP");
-        } catch (err2) {
-            try {
-                objetoAjax = new ActiveXObject("Microsoft.XMLHTTP");
-            } catch (err3) {
-                objetoAjax = false;
-            }
-        }
-    }
-    return objetoAjax;
-}
-
-// FUNCIÓN PARA INICIALIZAR EL FORMULARIO CON EL JSON BASE
+// FUNCIÓN PARA INICIALIZAR EL FORMULARIO
 function init() {
-    var JsonString = JSON.stringify(baseJSON, null, 2);
-    document.getElementById("description").value = JsonString;
+    document.getElementById("description").value = JSON.stringify(baseJSON, null, 2);
+}
+
+// FUNCIÓN PARA AGREGAR UN PRODUCTO A LA BASE DE DATOS
+function agregarProducto(event) {
+    event.preventDefault(); // Evita la doble ejecución
+
+    let jsonText = document.getElementById("description").value.trim();
+
+    if (!jsonText) {
+        alert("Por favor, ingresa los datos del producto en formato JSON.");
+        return;
+    }
+
+    try {
+        let producto = JSON.parse(jsonText);
+
+        fetch("./backend/create.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(producto),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("[SERVIDOR]", data);
+            alert(data.message);
+            
+            // Limpia el campo después de agregar un producto
+            document.getElementById("description").value = "";
+        })
+        .catch(error => console.error("Error:", error));
+
+    } catch (error) {
+        alert("Error en el formato del JSON. Verifica la sintaxis.");
+    }
+}
+
+// FUNCIÓN PARA BUSCAR UN PRODUCTO POR ID
+function buscarID(event) {
+    event.preventDefault();
+    let id = document.getElementById("search").value.trim();
+    if (!id) return alert("Ingresa un ID válido.");
+
+    fetch("./backend/read.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "id=" + encodeURIComponent(id)
+    })
+    .then(response => response.json())
+    .then(producto => {
+        let resultado = document.getElementById("productos");
+        resultado.innerHTML = producto ? `
+            <tr>
+                <td>${producto.id}</td>
+                <td>${producto.nombre}</td>
+                <td>
+                    <ul>
+                        <li>Precio: ${producto.precio}</li>
+                        <li>Unidades: ${producto.unidades}</li>
+                        <li>Modelo: ${producto.modelo}</li>
+                        <li>Marca: ${producto.marca}</li>
+                        <li>Detalles: ${producto.detalles}</li>
+                    </ul>
+                </td>
+            </tr>` : `<tr><td colspan='3'>No se encontraron productos.</td></tr>`;
+    });
+}
+
+// FUNCIÓN PARA BÚSQUEDA FLEXIBLE POR NOMBRE/MARCA/DETALLES
+function buscarProducto(event) {
+    event.preventDefault();
+    let query = document.getElementById("search").value.trim();
+    if (!query) return alert("Ingresa un criterio de búsqueda.");
+
+    fetch("./backend/read.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "query=" + encodeURIComponent(query)
+    })
+    .then(response => response.json())
+    .then(productos => {
+        let resultado = document.getElementById("productos");
+        resultado.innerHTML = productos.length ? productos.map(p => `
+            <tr>
+                <td>${p.id}</td>
+                <td>${p.nombre}</td>
+                <td>
+                    <ul>
+                        <li>Precio: ${p.precio}</li>
+                        <li>Unidades: ${p.unidades}</li>
+                        <li>Modelo: ${p.modelo}</li>
+                        <li>Marca: ${p.marca}</li>
+                        <li>Detalles: ${p.detalles}</li>
+                    </ul>
+                </td>
+            </tr>`).join("") : `<tr><td colspan='3'>No se encontraron productos.</td></tr>`;
+    });
 }
