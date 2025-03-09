@@ -13,7 +13,7 @@
         $sql = "UPDATE productos SET eliminado=1 WHERE id = {$id}";
         if ( $conexion->query($sql) ) {
             $data['status'] =  "success";
-            $data['message'] =  "Producto eliminado";
+            $data['message'] =  "Producto eliminado :D";
 		} else {
             $data['message'] = "ERROR: No se ejecuto $sql. " . mysqli_error($conexion);
         }
