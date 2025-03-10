@@ -18,7 +18,7 @@ function init() {
 // FUNCIÓN PARA LISTAR PRODUCTOS
 function listarProductos() {
     $.ajax({
-        url: '/backend/product-list.php',
+        url: './backend/product-list.php',
         method: 'GET',
         dataType: 'json',
         success: function (productos) {
@@ -67,7 +67,7 @@ function buscarProducto(e) {
     }
 
     $.ajax({
-        url: '/backend./product-search.php',
+        url: './backend/product-search.php',
         method: 'GET',
         data: { search: search },
         dataType: 'json',
@@ -111,7 +111,7 @@ function buscarProducto(e) {
 // FUNCIÓN PARA CARGAR UN PRODUCTO AL FORMULARIO AL HACER CLIC EN SU NOMBRE
 function cargarProducto(id) {
     $.ajax({
-        url: '/backend/product-edit.php',
+        url: './backend/product-edit.php',
         method: 'GET',
         data: { id: id },
         dataType: 'json',
@@ -131,7 +131,7 @@ function agregarProducto(e) {
     finalJSON['nombre'] = $('#name').val();
 
     var id = $('#submit-btn').attr('data-id');
-    var url = id ? '/backend/product-edit.php' : '/backend/product-add.php';
+    var url = id ? './backend/product-edit.php' : './backend/product-add.php';
 
     if (id) finalJSON['id'] = id;
 
@@ -149,7 +149,7 @@ function agregarProducto(e) {
     if (id) {
         // Comprobamos si el ID ya existe
         $.ajax({
-            url: '/backend/product-edit.php',
+            url: './backend/product-edit.php',
             method: 'GET',
             data: { id: id },
             dataType: 'json',
@@ -163,7 +163,7 @@ function agregarProducto(e) {
                         dataType: 'json',
                         success: function (respuesta) {
                             if (respuesta.status === "success") {
-                                alert("Producto modificado con éxito.");
+                                alert("Producto edietado con éxito.");
                             } else {
                                 alert("Error al modificar producto: " + respuesta.message);
                             }
@@ -202,7 +202,7 @@ function agregarProducto(e) {
 function eliminarProducto(id) {
     if (confirm("¿De verdad deseas eliminar el producto?")) {
         $.ajax({
-            url: '/backend/product-delete.php',
+            url: './backend/product-delete.php',
             method: 'GET',
             data: { id: id },
             dataType: 'json',
