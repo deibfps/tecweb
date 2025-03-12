@@ -1,14 +1,15 @@
 <?php
     include_once __DIR__.'/database.php';
-
+    
     // SE CREA EL ARREGLO QUE SE VA A DEVOLVER EN FORMA DE JSON
     $data = array(
         'status'  => 'error',
         'message' => 'La consulta falló'
     );
+
     // SE VERIFICA HABER RECIBIDO EL ID
     if( isset($_POST['id']) ) {
-        $jsonOBJ = json_decode( json_encode($_POST) );
+        $jsonOBJ = (object)$_POST;
         // SE REALIZA LA QUERY DE BÚSQUEDA Y AL MISMO TIEMPO SE VALIDA SI HUBO RESULTADOS
         $sql =  "UPDATE productos SET nombre='{$jsonOBJ->nombre}', marca='{$jsonOBJ->marca}',";
         $sql .= "modelo='{$jsonOBJ->modelo}', precio={$jsonOBJ->precio}, detalles='{$jsonOBJ->detalles}',"; 
