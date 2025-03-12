@@ -120,43 +120,32 @@ $(document).ready(function(){
 
     $('#product-form').submit(e => {
         e.preventDefault();
-
-        // SE CONVIERTE EL JSON DE STRING A OBJETO
-        let postData = JSON.parse( $('#description').val() );
-        // SE AGREGA AL JSON EL NOMBRE DEL PRODUCTO
+        let postData = JSON.parse($('#description').val());
         postData['nombre'] = $('#name').val();
         postData['id'] = $('#productId').val();
-
-        /**
-         * AQUÍ DEBES AGREGAR LAS VALIDACIONES DE LOS DATOS EN EL JSON
-         * --> EN CASO DE NO HABER ERRORES, SE ENVIAR EL PRODUCTO A AGREGAR
-         **/
-
+    
         const url = edit === false ? './backend/product-add.php' : './backend/product-edit.php';
-        
+    
         $.post(url, postData, (response) => {
-            //console.log(response);
-            // SE OBTIENE EL OBJETO DE DATOS A PARTIR DE UN STRING JSON
             let respuesta = JSON.parse(response);
-            // SE CREA UNA PLANTILLA PARA CREAR INFORMACIÓN DE LA BARRA DE ESTADO
-            let template_bar = '';
-            template_bar += `
-                        <li style="list-style: none;">status: ${respuesta.status}</li>
-                        <li style="list-style: none;">message: ${respuesta.message}</li>
-                    `;
-            // SE REINICIA EL FORMULARIO
+            let template_bar = `
+                <li style="list-style: none;">status: ${respuesta.status}</li>
+                <li style="list-style: none;">message: ${respuesta.message}</li>
+            `;
+    
             $('#name').val('');
             $('#description').val(JsonString);
-            // SE HACE VISIBLE LA BARRA DE ESTADO
             $('#product-result').show();
-            // SE INSERTA LA PLANTILLA PARA LA BARRA DE ESTADO
             $('#container').html(template_bar);
-            // SE LISTAN TODOS LOS PRODUCTOS
             listarProductos();
-            // SE REGRESA LA BANDERA DE EDICIÓN A false
             edit = false;
+
+            // CAMBIA DE VUELTA EL TEXTO DEL BOTON A "Agregar Producto"
+            $('button.btn-primary').text("Agregar Producto");
         });
     });
+    
+
 
     $(document).on('click', '.product-delete', (e) => {
         if(confirm('¿Realmente deseas eliminar el producto?')) {
@@ -190,6 +179,9 @@ $(document).ready(function(){
             
             // SE PONE LA BANDERA DE EDICIÓN EN true
             edit = true;
+
+            // SE CAMBIA EL TEXTO DEL BOTON A "Modificar Producto"
+            $('button.btn-primary').text("Modificar Producto");
         });
         e.preventDefault();
     });    
