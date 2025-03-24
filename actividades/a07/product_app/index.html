@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>ProductApp</title>
+    <!-- BOOTSTRAP 4  -->
+    <link rel="stylesheet" href="https://bootswatch.com/4/superhero/bootstrap.min.css">
+  </head> 
+  <body onload="init()"> <!-- Ejecuta la funcion init de app.js despues de cargar toda la pagina -->
+
+    <!-- BARRA DE NAVEGACIÓN  -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href=".">ProductApp</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto"></ul>
+          <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" name="search" id="search" type="search" placeholder="ID, marca o descripción" aria-label="Search">
+            <button class="btn btn-success my-2 my-sm-0" type="submit">Buscar</button>
+          </form>
+      </div>
+    </nav>
+
+
+    <!-- CONTENEDOR PARA AGREGAR ESPACIADO PRINCIPAL -->
+    <div class="container">
+      <div class="row p-4">
+        <div class="col-md-5">
+          <div class="card">
+            <div class="card-body">
+              <!-- FORMULARIO PARA AGREGAR PRODUCTO -->
+              <form id="product-form">
+                <intput type = "hidden" id="product-Id">
+                <div class="form-group">
+                  <label for="form-nombre">Nombre:</label>
+                  <input class="form-control" type="text" id="name" oninput="validarNombre()" placeholder="Nombre de producto">
+                </div>
+                <div class="form-group">
+
+                  <!--FORMULARIO-->
+                  <label for="form-marca">Marca:</label>
+                  <select name="marca" id="form-marca" onchange="validarMarca()" required>
+                      <option value="">Selecciona una marca</option>
+                      <option value="Bandai">Bandai</option>
+                      <option value="Good Smile Company">Good Smile Company</option>
+                      <option value="Kotobukiya">Kotobukiya</option>
+                      <option value="MegaHouse">MegaHouse</option>
+                      <option value="Aniplex">Aniplex</option>
+                      <option value="Funko">Funko</option>
+                      <option value="Q Posket">Q Posket</option>
+                      <option value="Hot Toys">Hot Toys</option>
+                      <option value="Pop Mart">Pop Mart</option>
+                      <option value="Funko">Funko</option>
+                      <option value="Hasbro">Hasbro</option>
+                      <option value="Mattel">Mattel</option>
+                      <option value="McFarlane Toys">McFarlane Toys</option>
+                      <option value="The Amazing DigitalCircus">The Amazing Digital Circus</option>
+                  </select><br>
+                  <label for="form-modelo">Modelo:</label> 
+                  <input type="text" name="modelo" id="form-modelo" oninput="validarModelo()" placeholder="Modelo del producto" required><br>
+                  <label for="form-precio">Precio:</label> 
+                  <input type="number" name="precio" id="form-precio" placeholder="Precio del producto" step="0.01" oninput="validarPrecio()" required><br>
+                  <label for="form-unidades">Unidades:</label> 
+                  <input type="number" name="unidades" id="form-unidades" oninput="validarUnidades()" placeholder="Unidades disponibles"><br>
+                  <label for="form-detalles">Detalles:</label>
+                  <textarea name="detalles" rows="4" cols="40" id="form-detalles" oninput="validarDetalles()" placeholder="Detalles del producto..." ></textarea><br>
+                  <label for="form-imagen">Imagen:</label>
+                  <input type="file" name="imagen" id="form-imagen" accept="image/*">
+                  
+
+                  <!--textarea class="form-control" id="description" cols="30" rows="10" placeholder="JSON de producto"></textarea--> <!-- Aqui se crea el JSON -->
+                </div>
+                <input type="hidden" id="productId">
+                <button class="btn btn-primary btn-block text-center" type="submit">
+                  Agregar Producto
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- TABLA  -->
+        <div class="col-md-7">
+          <!--div class="card my-4 d-block" id="product-result"-->
+          <div class="card my-4" id="product-result">
+            <div class="card-body">
+              <!-- RESULTADO -->
+              <ul id="container"></ul>
+            </div>
+          </div>
+
+          <table class="table table-bordered table-sm">
+            <thead>
+              <tr>
+                <td>Id</td>
+                <td>Nombre</td>
+                <td>Descripción</td>
+              </tr>
+            </thead>
+            <tbody id="products"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+    <!-- Lógica del Frontend -->
+    <script src="app.js"></script>
+    <script src="validaciones.js"></script>
+  </body>
+
+</html>
