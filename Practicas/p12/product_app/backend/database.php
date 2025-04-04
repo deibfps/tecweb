@@ -2,7 +2,7 @@
     $conexion = @mysqli_connect(
         'localhost',
         'root',
-        'Alaskita123',
+        'distrito123',
         'marketzone'
     );
 
