@@ -1,0 +1,7 @@
+RewriteEngine On
+RewriteBase /tecweb/practicas/p15/p13/product_app/backend/
+
+# Redirigir todas las solicitudes al index.php de Slim
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
